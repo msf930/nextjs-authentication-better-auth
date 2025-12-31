@@ -9,11 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-neon": "^7.2.0",
     "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^6.15.0",
+    "@prisma/client": "^7.2.0",
     "better-auth": "^1.3.7",
+    "dotenv": "^17.2.3",
     "next": "15.5.9",
-    "prisma": "^6.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
@@ -25,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "prisma": "^7.2.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

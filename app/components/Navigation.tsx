@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { auth } from "@/lib/auth";
 
-export default function Navigation() {
+type Session = typeof auth.$Infer.Session;
+
+export default function Navigation({ session }: { session: Session | null }) {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -38,28 +41,27 @@ export default function Navigation() {
           <nav className="flex items-center space-x-6">
             <Link
               href="/"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive("/")
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive("/")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Home
             </Link>
 
-            <Link
+            {session && <Link
               href="/dashboard"
               className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
             >
               Dashboard
-            </Link>
-
-            <Link
+            </Link>}
+            
+            {!session && <Link
               href="/auth"
               className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
               Sign In
-            </Link>
+            </Link>}
           </nav>
         </div>
       </div>
