@@ -1,11 +1,18 @@
 "use client";
 import { signOut } from "@/lib/actions/auth-actions";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function DashboardClientPage() {
-  const router = useRouter();
+type Session = typeof auth.$Infer.Session;
 
+export default function DashboardClientPage({ session }: { session: Session }) {
+  const router = useRouter();
+  console.log(session);
+  const name = session.user?.name;
+  const email = session.user?.email;
+  const userId = session.user?.id;
+ 
   // Redirect to auth if not authenticated
 
   const handleSignOut = async () => {
@@ -37,8 +44,8 @@ export default function DashboardClientPage() {
                     }
                   />
                   <div className="text-sm">
-                    <p className="text-gray-900 font-medium">John Doe</p>
-                    <p className="text-gray-500">email@gmail.com</p>
+                    <p className="text-gray-900 font-medium">{name}</p>
+                    <p className="text-gray-500">{email}</p>
                   </div>
                 </div>
                 <button
@@ -68,7 +75,7 @@ export default function DashboardClientPage() {
                 </div>
                 <div>
                   <span className="font-medium text-blue-700">User ID:</span>
-                  <span className="ml-2 text-blue-600">1234566</span>
+                  <span className="ml-2 text-blue-600">{userId}</span>
                 </div>
                 <div>
                   <span className="font-medium text-blue-700">
