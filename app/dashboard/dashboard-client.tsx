@@ -8,7 +8,7 @@ type Session = typeof auth.$Infer.Session;
 
 export default function DashboardClientPage({ session }: { session: Session }) {
   const router = useRouter();
- 
+  console.log(session);
   const name = session.user?.name;
   const email = session.user?.email;
   const userId = session.user?.id;
@@ -77,12 +77,12 @@ export default function DashboardClientPage({ session }: { session: Session }) {
                   <span className="font-medium text-blue-700">User ID:</span>
                   <span className="ml-2 text-blue-600">{userId}</span>
                 </div>
-                <div>
+                {/* <div>
                   <span className="font-medium text-blue-700">
                     Email Verified:
                   </span>
                   <span className="ml-2 text-blue-600">Yes</span>
-                </div>
+                </div> */}
               </div>
             </div>
 

@@ -3,7 +3,7 @@
 import { signIn, signUp } from "@/lib/actions/auth-actions";
 import { useState } from "react";
 import { signInSocial } from "@/lib/actions/auth-actions";
-// import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function AuthClientPage() {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -12,8 +12,7 @@ export default function AuthClientPage() {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Get callback URL from search params (set by middleware)
 
@@ -46,11 +45,17 @@ export default function AuthClientPage() {
         const result = await signIn(email, password);
         if (!result.user) {
           setError("Invalid email or password");
+        } else {
+          // Redirect to dashboard on successful sign-in
+          router.push("/dashboard");
         }
       } else {
         const result = await signUp(email, password, name);
         if (!result.user) {
           setError("Failed to create account");
+        } else {
+          // Redirect to dashboard on successful sign-up
+          router.push("/dashboard");
         }
       }
     } catch (err) {
