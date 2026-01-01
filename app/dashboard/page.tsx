@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import DashboardClientPage from "./dashboard-client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { Session } from "@/lib/auth";
+
+type Session = typeof auth.$Infer.Session;
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({

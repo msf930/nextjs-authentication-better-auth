@@ -8,7 +8,7 @@ type Session = typeof auth.$Infer.Session;
 
 export default function DashboardClientPage({ session }: { session: Session }) {
   const router = useRouter();
-  console.log(session);
+ 
   const name = session.user?.name;
   const email = session.user?.email;
   const userId = session.user?.id;
