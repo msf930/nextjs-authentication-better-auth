@@ -3,6 +3,7 @@ import { signOut } from "@/lib/actions/auth-actions";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Avatar } from "radix-ui";
 
 type Session = typeof auth.$Infer.Session;
 
@@ -12,7 +13,7 @@ export default function DashboardClientPage({ session }: { session: Session }) {
   const name = session.user?.name;
   const email = session.user?.email;
   const userId = session.user?.id;
- 
+
   // Redirect to auth if not authenticated
 
   const handleSignOut = async () => {
@@ -35,14 +36,24 @@ export default function DashboardClientPage({ session }: { session: Session }) {
                   Manage your account and explore better-auth features
                 </p>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 ">
                 <div className="flex items-center space-x-3">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={
-                      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-                    }
-                  />
+                  <div className="flex gap-4 items-center">
+                    <Avatar.Root className="inline-flex size-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+                      <Avatar.Image
+                        className="size-full rounded-[inherit] object-cover"
+                        src=""
+                        alt={name}
+                      />
+                      <Avatar.Fallback
+                        className="leading-1 flex size-full items-center justify-center bg-gray-100 text-[15px] font-medium text-purple-500"
+                        delayMs={600}
+                      >
+                        {name?.split(" ")[0]?.charAt(0)}
+                        {name?.split(" ")[1]?.charAt(0)}
+                      </Avatar.Fallback>
+                    </Avatar.Root>
+                  </div>
                   <div className="text-sm">
                     <p className="text-gray-900 font-medium">{name}</p>
                     <p className="text-gray-500">{email}</p>
@@ -86,109 +97,9 @@ export default function DashboardClientPage({ session }: { session: Session }) {
               </div>
             </div>
 
-            {/* Demo Features */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-indigo-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Social Login
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Seamlessly authenticate with Google, GitHub, and other social
-                  providers.
-                </p>
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  User Management
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Manage user accounts, profiles, and authentication settings.
-                </p>
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-purple-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Secure Access
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Protected routes and secure authentication flow with
-                  better-auth.
-                </p>
-              </div>
-            </div>
 
-            {/* Demo Actions */}
-            <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Try These Actions
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => alert("Mock action: Profile updated!")}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                >
-                  Update Profile
-                </button>
-                <button
-                  onClick={() => alert("Mock action: Settings saved!")}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                >
-                  Save Settings
-                </button>
-                <button
-                  onClick={() => alert("Mock action: Data exported!")}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                >
-                  Export Data
-                </button>
-              </div>
-            </div>
 
             {/* Navigation */}
             <div className="mt-8 pt-6 border-t border-gray-200">
