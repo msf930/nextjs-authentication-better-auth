@@ -7,6 +7,11 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true, // Require email verification before allowing login
+  },
+  emailVerification: {
+    sendOnSignUp: true, // Automatically send verification email on sign up
+    autoSignInAfterVerification: true, 
   },
   socialProviders: {
     github: {
