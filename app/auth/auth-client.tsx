@@ -59,11 +59,16 @@ export default function AuthClientPage() {
         }
       }
     } catch (err) {
-      setError(
-        `Authentication error: ${
-          err instanceof Error ? err.message : "Unknown error"
-        }`
-      );
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      
+      // Provide more helpful error messages
+      if (errorMessage.includes("email service") || errorMessage.includes("sendVerificationEmail")) {
+        setError("Email service not configured. Please contact support or check server logs for verification URL.");
+      } else {
+        setError(`Authentication error: ${errorMessage}`);
+      }
+      
+      console.error("Authentication error details:", err);
     } finally {
       setIsLoading(false);
     }
@@ -185,7 +190,7 @@ export default function AuthClientPage() {
                   required={!isSignIn}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   placeholder="Enter your full name"
                 />
               </div>
