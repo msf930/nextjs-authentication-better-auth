@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "prisma:generate-js": "npx prisma generate && mv generated/prisma/client/enums.mjs generated/prisma/client/enums.js && mv generated/prisma/client/index.mjs generated/prisma/client/index.js"
+    "prisma:generate-js": "npx prisma generate && node scripts/convert-prisma-to-js.mjs"
   },
   "dependencies": {
     "@heroui/avatar": "^2.2.24",

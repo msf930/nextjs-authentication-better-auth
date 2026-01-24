@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import { headers } from "next/headers";
+import { ensureUserHasCollection } from "../collection";
 
 export const signUp = async (email: string, password: string, name: string) => {
   try {
@@ -14,6 +15,10 @@ export const signUp = async (email: string, password: string, name: string) => {
         callbackURL: "/dashboard",
       },
     });
+
+    if (result.user) {
+      await ensureUserHasCollection(result.user.id);
+    }
 
     return result;
   } catch (error) {
@@ -31,6 +36,10 @@ export const signIn = async (email: string, password: string) => {
         callbackURL: "/dashboard",
       },
     });
+
+    if (result.user) {
+      await ensureUserHasCollection(result.user.id);
+    }
 
     return result;
   } catch (error) {
@@ -56,5 +65,37 @@ export const signInSocial = async (provider: "github" | "google") => {
   });
   if (url) {
     redirect(url);
+  }
+};
+
+export const requestPasswordReset = async (email: string) => {
+  try {
+    const result = await auth.api.forgetPassword({
+      body: {
+        email,
+        redirectTo: "/auth/reset-password",
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Password reset request error:", error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (token: string, newPassword: string) => {
+  try {
+    const result = await auth.api.resetPassword({
+      body: {
+        token,
+        newPassword,
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Password reset error:", error);
+    throw error;
   }
 };

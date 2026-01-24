@@ -25,6 +25,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  collections   Collection[]
 
   @@unique([email])
   @@map("user")
@@ -76,4 +77,28 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Collection {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         Item[]    // Many-to-many relationship with Item
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([userId])
+  @@map("collection")
+}
+
+model Item {
+  id            String     @id @default(cuid())
+  name          String
+  url           String?
+  rarity        String
+  collections   Collection[] // Many-to-many relationship with Collection
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  
+  @@map("item")
 }

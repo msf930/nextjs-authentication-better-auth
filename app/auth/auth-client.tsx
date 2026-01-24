@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signUp } from "@/lib/actions/auth-actions";
+import { signIn, signUp, requestPasswordReset } from "@/lib/actions/auth-actions";
 import { useState } from "react";
 import { signInSocial } from "@/lib/actions/auth-actions";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,7 @@ export default function AuthClientPage() {
           setError("Failed to create account");
         } else {
           // Redirect to dashboard on successful sign-up
-          router.push("/dashboard");
+          router.push("/validate");
         }
       }
     } catch (err) {
@@ -73,6 +73,7 @@ export default function AuthClientPage() {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -274,7 +275,7 @@ export default function AuthClientPage() {
           </form>
 
           {/* Toggle between Sign In and Sign Up */}
-          <div className="text-center">
+          <div className="text-center flex flex-col items-center space-y-2">
             <button
               type="button"
               onClick={() => {
@@ -287,6 +288,15 @@ export default function AuthClientPage() {
               {isSignIn
                 ? "Don't have an account? Sign up"
                 : "Already have an account? Sign in"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                router.push("/reset-password");
+              }}
+              className="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition-colors"
+            >
+              Forgot your password?
             </button>
           </div>
         </div>

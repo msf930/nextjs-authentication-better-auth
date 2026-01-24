@@ -55,7 +55,19 @@ export default function Navigation({ session }: { session: Session | null }) {
             >
               Dashboard
             </Link>}
-            
+              {session && <Link
+                href="/open-packs"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              >
+                Open Packs
+              </Link>}
+              {session && <Link
+                href="/collection"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              >
+                Collection
+              </Link>}
+                
             {!session && <Link
               href="/auth"
               className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"

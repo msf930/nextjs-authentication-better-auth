@@ -2,11 +2,33 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { prisma } from "./prisma";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      // Use void to avoid awaiting and prevent timing attacks
+      // On serverless platforms, waitUntil ensures email is sent without blocking response
+      const emailPromise = resend.emails.send({
+        from: 'info@servaldesigns.com',
+        to: user.email,
+        subject: 'Reset your password',
+        html: `<a href="${url}">Reset your password</a>`
+      });
+
+      // Use waitUntil if available (Next.js serverless/edge runtime)
+      if (request && 'waitUntil' in request && typeof request.waitUntil === 'function') {
+        request.waitUntil(emailPromise);
+      } else {
+        // Fallback: use void to not await (prevents timing attacks)
+        void emailPromise;
+      }
+    },
+    
     requireEmailVerification: true, // Require email verification before allowing login
   },
   emailVerification: {
@@ -14,37 +36,23 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     // Custom email sending function - you need to configure an email service
     // For now, this will log the verification URL in development
-    sendVerificationEmail: async ({ user, url, token }) => {
-      // TODO: Replace this with your email service (Resend, SendGrid, SMTP, etc.)
-      // In development, log the URL to console for testing
-      if (process.env.NODE_ENV === "development") {
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.log("📧 Email Verification Required");
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.log("To:", user.email);
-        console.log("Verification URL:", url);
-        console.log("Token:", token);
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      // Use void to avoid awaiting and prevent timing attacks
+      // On serverless platforms, waitUntil ensures email is sent without blocking response
+      const emailPromise = resend.emails.send({
+        from: 'info@servaldesigns.com',
+        to: user.email,
+        subject: 'Verify your email',
+        html: `<a href="${url}">Verify Email</a>`
+      });
+
+      // Use waitUntil if available (Next.js serverless/edge runtime)
+      if (request && 'waitUntil' in request && typeof request.waitUntil === 'function') {
+        request.waitUntil(emailPromise);
       } else {
-        // In production, you must configure an email service
-        console.error(
-          "⚠️ Email service not configured! User cannot verify email:",
-          user.email
-        );
-        console.error("Verification URL:", url);
-        // Example with Resend:
-        // import { Resend } from 'resend';
-        // const resend = new Resend(process.env.RESEND_API_KEY);
-        // await resend.emails.send({
-        //   from: 'noreply@yourdomain.com',
-        //   to: user.email,
-        //   subject: 'Verify your email',
-        //   html: `<a href="${url}">Verify Email</a>`
-        // });
+        // Fallback: use void to not await (prevents timing attacks)
+        void emailPromise;
       }
-      
-      // Don't throw - let the signup succeed, but email won't be sent
-      // This allows testing without email service configured
     },
   },
   socialProviders: {
@@ -58,5 +66,4 @@ export const auth = betterAuth({
     },
   },
   plugins: [nextCookies()],
-  
 });

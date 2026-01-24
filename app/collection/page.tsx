@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
-import DashboardClientPage from "./dashboard-client";
+import CollectionClientPage from "./collection-client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { ensureUserHasCollection } from "@/lib/collection";
 
 type Session = typeof auth.$Infer.Session;
 
-export default async function DashboardPage() {
+export default async function CollectionPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -17,5 +17,5 @@ export default async function DashboardPage() {
 
   await ensureUserHasCollection(session.user.id);
 
-  return <DashboardClientPage session={session as Session} />;
+  return <CollectionClientPage session={session as Session} />;
 }
