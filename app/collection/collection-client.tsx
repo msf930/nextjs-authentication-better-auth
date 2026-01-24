@@ -8,10 +8,12 @@ import { Avatar } from "radix-ui";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { clearCollection, getCollection } from "@/lib/actions/collection-actions";
+import type { Item } from "@/generated/prisma/client";
+
 type Session = typeof auth.$Infer.Session;
 
 export default function CollectionClientPage({ session }: { session: Session }) {
-    const [items, setItems] = useState<any[]>([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
