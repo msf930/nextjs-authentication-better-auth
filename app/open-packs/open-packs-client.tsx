@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 import { Avatar } from "radix-ui";
 import { useState } from "react";
 import Image from "next/image";
+import type { Item } from "@/generated/prisma/client";
+
 type Session = typeof auth.$Infer.Session;
 
 export default function OpenPacksClientPage({ session }: { session: Session }) {
-    const [items, setItems] = useState<any[]>([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
