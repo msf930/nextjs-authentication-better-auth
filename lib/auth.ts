@@ -4,9 +4,13 @@ import { nextCookies } from "better-auth/next-js";
 import { prisma } from "./prisma";
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+// Use RESEND_API_KEY in production (server-only). Fallback for dev if you use NEXT_PUBLIC_*.
+const resend = new Resend(process.env.RESEND_API_KEY || process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
 export const auth = betterAuth({
+  // Required for prod: set BETTER_AUTH_URL to your production URL (e.g. https://yourdomain.com)
+  // so password reset and verification emails contain correct links.
+  baseURL: process.env.BETTER_AUTH_URL,
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: {
     enabled: true,
