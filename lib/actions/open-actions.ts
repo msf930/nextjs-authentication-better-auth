@@ -17,9 +17,9 @@ export const openPack = async (userId: string) => {
             await ensureUserHasCollection(userId);
         }
         
-        let items = [];
+        const items = [];
        
-        let group1 = await prisma.item.findMany({
+        const group1 = await prisma.item.findMany({
             where: {
                 AND: [
                     { rarity: { equals: "Common" } },
@@ -34,14 +34,14 @@ export const openPack = async (userId: string) => {
                 ]
             }
         });
-        let group2 = await prisma.item.findMany({
+        const group2 = await prisma.item.findMany({
             where: {
 
                      rarity: { equals: "Uncommon" } ,
                    
             }
         });
-        let group3 = await prisma.item.findMany({
+        const group3 = await prisma.item.findMany({
             where: {
                 OR: [
                     { rarity: { equals: "Common" } },
@@ -50,7 +50,7 @@ export const openPack = async (userId: string) => {
                 ]
             }
         });
-        let group4 = await prisma.item.findMany({
+        const group4 = await prisma.item.findMany({
             where: {
                 OR: [
                     { rarity: { equals: "Common" } },
@@ -62,7 +62,7 @@ export const openPack = async (userId: string) => {
                 ]
             }
         });
-        let group5 = await prisma.item.findMany({
+        const group5 = await prisma.item.findMany({
             where: {
                 OR: [
                     { rarity: { equals: "Ultra Rare" } },
@@ -74,7 +74,7 @@ export const openPack = async (userId: string) => {
         });
 
 
-        let group6 = await prisma.item.findMany({
+        const group6 = await prisma.item.findMany({
             where: {
                 OR: [
                     { id: { equals: "208" } },
