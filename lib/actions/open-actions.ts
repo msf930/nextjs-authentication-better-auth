@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { ensureUserHasCollection } from "../collection";
 
 import { prisma } from "../prisma";
+import type { Item } from "../../generated/prisma/client";
 
 
 
@@ -123,19 +124,18 @@ export const openPack = async (userId: string) => {
             where: { userId: userId },
             select: { id: true },
         });
-        let currentCollection: any[] = [];
         const currentCollectionItems = await prisma.collection.findUnique({
             where: { id: collectionId?.id },
             include: {
               items: true,
             },
           });
-          currentCollection = currentCollectionItems?.items ?? [];
+        const currentCollection: Item[] = currentCollectionItems?.items ?? [];
         console.log("currentCollection", currentCollection);
         for (let i = 0; i < items.length; i++) {
             let boolean = true;
-            for (let j = 0; j < currentCollection?.length; j++) {
-                if(currentCollection[j].itemId === items[i].id) {
+            for (let j = 0; j < currentCollection.length; j++) {
+                if (currentCollection[j].id === items[i].id) {
                     boolean = false;
                     break;
                 }
